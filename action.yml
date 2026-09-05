@@ -74,6 +74,10 @@ inputs:
     description: 'The version to release as.'
     required: false
     default: ''
+  ignore-intra-branch-commits:
+    description: 'If true, ignore intra-branch commits on merged pull requests'
+    required: false
+    default: false
 runs:
   using: 'node24'
   main: 'dist/index.js'

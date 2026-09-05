@@ -218,6 +218,32 @@ describe('release-please-action', () => {
           sinon.match.any,
         );
       });
+
+      it('allows specifying ignore-intra-branch-commits', async () => {
+        restoreEnv = mockInputs({
+          'release-type': 'simple',
+          'ignore-intra-branch-commits': 'true',
+        });
+        fakeManifest.createReleases.resolves([]);
+        fakeManifest.createPullRequests.resolves([]);
+        await action.main(fetch);
+        sinon.assert.calledOnce(fakeManifest.createReleases);
+        sinon.assert.calledOnce(fakeManifest.createPullRequests);
+
+        sinon.assert.calledWith(
+          fromConfigStub,
+          sinon.match.any,
+          sinon.match.string,
+          sinon.match({
+            releaseType: 'simple',
+            ignoreIntraBranchCommits: true,
+          }),
+          sinon.match({
+            ignoreIntraBranchCommits: true,
+          }),
+          sinon.match.any,
+        );
+      });
     });
 
     describe('with manifest', () => {
@@ -363,6 +389,34 @@ describe('release-please-action', () => {
         // Verify that changelogHost was NOT added when using default value
         assert.strictEqual(fakeManifest.repositoryConfig['.'].changelogHost, undefined);
         assert.strictEqual(fakeManifest.repositoryConfig['packages/foo'].changelogHost, undefined);
+      });
+      it('allows specifying ignore-intra-branch-commits and modifies repositoryConfig', async () => {
+        restoreEnv = mockInputs({
+          'ignore-intra-branch-commits': 'true',
+        });
+
+        const mockRepositoryConfig = {
+          '.': { releaseType: 'node' },
+        };
+        Object.defineProperty(fakeManifest, 'repositoryConfig', {
+          value: mockRepositoryConfig,
+          writable: true,
+          configurable: true
+        });
+        fakeManifest.createReleases.resolves([]);
+        fakeManifest.createPullRequests.resolves([]);
+
+        await action.main(fetch);
+
+        sinon.assert.calledWith(
+          fromManifestStub,
+          sinon.match.any,
+          sinon.match.string,
+          sinon.match.string,
+          sinon.match.string,
+          sinon.match({ignoreIntraBranchCommits: true}),
+        );
+        assert.strictEqual((fakeManifest.repositoryConfig['.'] as any).ignoreIntraBranchCommits, true);
       });
     });
 
