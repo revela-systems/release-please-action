@@ -88,6 +88,7 @@ steps:
 | `changelog-host`           | The proto://host where commits live. Defaults to `${{ github.server_url }}` (usually `https://github.com`)                             |
 | `versioning-strategy`      | The versioning strategy to use. Defaults to `default`                                                                                  |
 | `release-as`               | The version to release as.                                                                                                             |
+| `ignore-intra-branch-commits` | If `true`, ignore intra-branch commits on merged pull requests when evaluating changelog notes and version bumps. Defaults to `false` |
 
 ## GitHub Credentials
 
@@ -436,6 +437,7 @@ you can see a mapping of the old option to the new option:
 | `exclude-paths`                    | `$.exclude-paths` or `$.packages[path].exclude-paths`                                 | Root or per-package option                                                          |
 | `extra-files`                      | `$.extra-files` or `$.packages[path].extra-files`                                     | Root or per-package option                                                          |
 | `extra-labels`                     | `$.extra-labels` or `$.packages[path].extra-labels`                                   | Root or per-package option                                                          |
+| `ignore-intra-branch-commits`      | `$.ignore-intra-branch-commits` or `$.packages[path].ignore-intra-branch-commits`     | Root or per-package option                                                          |
 | `include-v-in-tag`                 | `$.include-v-in-tag` or `$.packages[path].include-v-in-tag`                           | Root or per-package option                                                          |
 | `initial-version`                  | `$.initial-version` or `$.packages[path].initial-version`                             | Root or per-package option                                                          |
 | `labels`                           | `$.label` or `$.packages[path].label`                                                 | Root or per-package option                                                          |
